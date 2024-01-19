@@ -12,7 +12,7 @@ import FontSize from "../constants/FontSize";
 import Spacing from "../constants/Spacing";
 
 const AppTextInput = ({ ...otherProps }) => {
-  const [focused, setFocused] = useState<boolean>(false);
+  const [focused, setFocused] = useState(false);
   return (
     <TextInput
       onFocus={() => setFocused(true)}
