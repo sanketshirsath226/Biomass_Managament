@@ -17,8 +17,8 @@ const { height } = Dimensions.get("window");
 
 const WelcomeScreen = ({ navigation: { navigate } }) => {
     return (
-        <SafeAreaView>
-            <View>
+        <SafeAreaView className={''}>
+            <View className={'h-full justify-center '}>
                 <ImageBackground
                     style={{
                         height: height / 2.5,
