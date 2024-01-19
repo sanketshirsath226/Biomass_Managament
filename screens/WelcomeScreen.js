@@ -40,7 +40,8 @@ const WelcomeScreen = ({ navigation: { navigate } }) => {
                             textAlign: "center",
                         }}
                     >
-                        Discover Your Dream Job here
+                        Discover Your Biomass waste here
+
                     </Text>
 
                     <Text
