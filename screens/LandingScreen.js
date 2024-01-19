@@ -1,5 +1,5 @@
 import {Platform, SafeAreaView, StatusBar, Text, View, StyleSheet, Image, TextBase} from 'react-native';
-const Landing_Page = require('../assets/images/landing_page.png')
+const Landing_Page = require('../assets/images/welcome-img.png')
 export default function LandingScreen() {
   return (
       <View className={'flex-1 relative'}>
