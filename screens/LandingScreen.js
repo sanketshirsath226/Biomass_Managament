@@ -10,7 +10,7 @@ export default function LandingScreen() {
             </Image>
             <Text className={'text-black text-3xl leading-normal font-semibold   w-3/4 text-center'}>
                 Discover Your
-                Dream Job here
+                Biomass waste here
             </Text>
         </View>
       </SafeAreaView>
