@@ -7,6 +7,7 @@ import Colors from "../constants/Colors";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import Welcome from "../screens/WelcomeScreen";
+import OtpScreen from "../screens/OtpScreen";
 
 // ... import other screens
 
@@ -30,6 +31,7 @@ export default function Navigation() {
                 <Stack.Screen name="Welcome" component={Welcome} />
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Register" component={RegisterScreen} />
+                <Stack.Screen name='Otp' component={OtpScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
