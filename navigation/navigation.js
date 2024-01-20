@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import LandingScreen from "../screens/LandingScreen";
 import { DefaultTheme } from "@react-navigation/native";
 import Colors from "../constants/Colors";
 import LoginScreen from "../screens/LoginScreen";
