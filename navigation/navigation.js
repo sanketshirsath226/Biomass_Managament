@@ -7,6 +7,7 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import Welcome from "../screens/WelcomeScreen";
 import OtpScreen from "../screens/OtpScreen";
+import ResultScreen from "../screens/ResultScreen";
 
 // ... import other screens
 
@@ -31,6 +32,8 @@ export default function Navigation() {
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Register" component={RegisterScreen} />
                 <Stack.Screen name='Otp' component={OtpScreen}/>
+                <Stack.Screen name='PopMessage' component={ResultScreen}/>
+
             </Stack.Navigator>
         </NavigationContainer>
     );

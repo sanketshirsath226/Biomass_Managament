@@ -74,6 +74,11 @@ const OtpScreen = ({ navigation: { navigate } }) => {
                 </View>
 
                 <TouchableOpacity
+                    onPress={() => navigate("PopMessage",{result : {
+                        success : true,
+                        title : 'Success',
+                        message : 'Congratulation! You have been successfully authenticated'
+                        }})}
                     style={{
                         padding: Spacing * 2,
                         backgroundColor: Colors.primary,

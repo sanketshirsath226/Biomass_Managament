@@ -1,4 +1,4 @@
-export const API_URL = 'https://your-api-endpoint';
+export const API_URL = 'https://axiosConfig.js';
 export const MAPBOX_TOKEN = 'your-mapbox-token';
 export const WEATHER_API_KEY = 'your-weather-api-key';
 

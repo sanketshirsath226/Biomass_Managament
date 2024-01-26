@@ -6,15 +6,35 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Spacing from "../constants/Spacing";
 import FontSize from "../constants/FontSize";
 import Colors from "../constants/Colors";
 import Font from "../constants/Font";
 import { Ionicons } from "@expo/vector-icons";
 import AppTextInput from "../components/AppTextInput";
+import {useDispatch, useSelector} from "react-redux";
+import {loginUser} from "../action/userAction";
 
 const LoginScreen = ({ navigation: { navigate } }) => {
+    const dispatch = useDispatch();
+
+    const { loading, isAuthenticated, error, user } = useSelector((state) => state.user);
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleLogin = async (e) => {
+        await dispatch(loginUser(email, password));
+    }
+
+
+    useEffect(() => {
+            if(user){
+                console.log(user)
+            }
+    }, [user,dispatch]);
+
     return (
         <SafeAreaView>
             <View
@@ -53,8 +73,12 @@ const LoginScreen = ({ navigation: { navigate } }) => {
                         marginVertical: Spacing * 3,
                     }}
                 >
-                    <AppTextInput placeholder="Email" />
-                    <AppTextInput placeholder="Password" />
+                    <AppTextInput placeholder="Email" value={email} onChangeText = {(e) =>{
+                        setEmail(e)
+                    }} />
+                    <AppTextInput placeholder="Password" value={password} onChangeText = {(e) =>{
+                        setPassword(e)
+                    }} />
                 </View>
 
                 <View>
@@ -83,6 +107,9 @@ const LoginScreen = ({ navigation: { navigate } }) => {
                         },
                         shadowOpacity: 0.3,
                         shadowRadius: Spacing,
+                    }}
+                    onPress={()=>{
+                        handleLogin()
                     }}
                 >
                     <Text

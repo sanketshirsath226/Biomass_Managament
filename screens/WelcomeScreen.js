@@ -24,7 +24,7 @@ const WelcomeScreen = ({ navigation: { navigate } }) => {
                         height: height / 2.5,
                     }}
                     resizeMode="contain"
-                    source={require("../assets/images/welcome-img.png")}
+                    source={require("../assets/images/welcome-img1.png")}
                 />
                 <View
                     style={{
