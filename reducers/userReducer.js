@@ -47,7 +47,7 @@ import {
 } from "../constants/userConstants";
 
 
-export const userReducer = (state = { user: {} }, { type, payload }) => {
+export const userReducer = (state = { message:{},user: {} }, { type, payload }) => {
 
     switch (type) {
         case LOGIN_USER_REQUEST:
@@ -58,7 +58,6 @@ export const userReducer = (state = { user: {} }, { type, payload }) => {
                 isAuthenticated: false,
             };
         case LOGIN_USER_SUCCESS:
-        case REGISTER_USER_SUCCESS:
         case LOAD_USER_SUCCESS:
             return {
                 ...state,
@@ -66,6 +65,13 @@ export const userReducer = (state = { user: {} }, { type, payload }) => {
                 isAuthenticated: true,
                 user: payload,
             };
+        case REGISTER_USER_SUCCESS:
+            console.log(payload)
+            return {
+                loading: false,
+                isAuthenticated: true,
+                message : payload.message
+            }
         case LOGOUT_USER_SUCCESS:
             return {
                 loading: false,

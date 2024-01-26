@@ -6,7 +6,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Spacing from "../constants/Spacing";
 import FontSize from "../constants/FontSize";
 import Colors from "../constants/Colors";
@@ -14,8 +14,51 @@ import Font from "../constants/Font";
 import { Ionicons } from "@expo/vector-icons";
 
 import AppTextInput from "../components/AppTextInput";
+import {useDispatch, useSelector} from "react-redux";
+import {loginUser, registerUser} from "../action/userAction";
 
 const RegisterScreen = ({ navigation: { navigate } }) => {
+
+    const [email,setEmail] = useState("");
+    const [password,setPassword] = useState("");
+    const [confirmPassword , setConfirmPassword] = useState("");
+    const dispatch = useDispatch();
+
+    const { loading, isAuthenticated, error, message } = useSelector((state) => state.user);
+
+
+    useEffect(() => {
+        if(isAuthenticated){
+            console.log(message)
+            navigate('Login');
+        }
+    }, [useDispatch,isAuthenticated,message]);
+
+
+
+    // TODO : Need to Change the OnHandleChange to dynamically update according to the name tag
+    // const onHandleChange = (e) =>{
+    //     console.log(e)
+    //     switch (e.name){
+    //         case "email" :
+    //             setEmail(e.target.value);
+    //             break;
+    //         case "password":
+    //             setPassword(e.target.value);
+    //             break;
+    //         case "confirm Password":
+    //             setConfirmPassword(e.target.value);
+    //             break;
+    //     }
+    // }
+
+    const onHandleSubmit = async (e) => {
+        if(password !== confirmPassword){
+            return;
+        }
+        await dispatch(registerUser(email, password));
+    }
+
     return (
         <SafeAreaView>
             <View
@@ -54,13 +97,21 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
                         marginVertical: Spacing * 3,
                     }}
                 >
-                    <AppTextInput placeholder="Email" />
-                    <AppTextInput placeholder="Password" />
-                    <AppTextInput placeholder="Confirm Password" />
+                    <AppTextInput name="email" placeholder="Email" value={email}  onChangeText = {(text) =>{
+                        setEmail(text)
+                    }} />
+                    <AppTextInput name={"password"} placeholder="Password" value={password} key={'password'} onChangeText = {(text) =>{
+                        setPassword(text)
+                    }} />
+                    <AppTextInput name={"confirm Password"}  placeholder="Confirm Password" value={confirmPassword} onChangeText = {(text) =>{
+                        setConfirmPassword(text)
+                    }} />
+
+
                 </View>
 
                 <TouchableOpacity
-                    onPress={() => navigate("Otp")}
+                    onPress={onHandleSubmit}
                     style={{
                         padding: Spacing * 2,
                         backgroundColor: Colors.primary,

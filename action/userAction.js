@@ -65,26 +65,26 @@ export const loginUser = (email, password) => async (dispatch) => {
 }
 
 // Register User
-export const registerUser = (userData) => async (dispatch) => {
+export const registerUser = (email,password) => async (dispatch) => {
     try {
 
         dispatch({ type: REGISTER_USER_REQUEST });
 
         const config = {
             headers: {
-                "Content-Type": "multipart/form-data",
+                "Content-Type": "application/json",
             },
         }
 
         const { data } = await axios.post(
-            '/api/v1/signup',
-            userData,
+            '/api/v1/users/register',
+            { email, password },
             config
         );
-
+        console.log(data)
         dispatch({
             type: REGISTER_USER_SUCCESS,
-            payload: data.user,
+            payload: data,
         });
 
     } catch (error) {
