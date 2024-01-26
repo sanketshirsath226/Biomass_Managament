@@ -32,7 +32,7 @@ import {
     UPDATE_PROFILE_SUCCESS,
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
-    USER_DETAILS_SUCCESS
+    USER_DETAILS_SUCCESS, VERIFY_USER_FAIL, VERIFY_USER_REQUEST, VERIFY_USER_SUCCESS
 } from "../constants/userConstants";
 import axios from '../config/axiosConfig';
 
@@ -54,18 +54,21 @@ export const loginUser = (email, password) => async (dispatch) => {
 
         dispatch({
             type: LOGIN_USER_SUCCESS,
-            payload: data.user,
+            payload: data,
         });
     } catch (error) {
         dispatch({
             type: LOGIN_USER_FAIL,
-            payload: error.response.data.message,
+            payload: {
+                status_code : error.response.status,
+                message : error.response.data.message
+            },
         });
     }
 }
 
 // Register User
-export const registerUser = (email,password) => async (dispatch) => {
+export const registerUser = (email,mobile,password) => async (dispatch) => {
     try {
 
         dispatch({ type: REGISTER_USER_REQUEST });
@@ -78,7 +81,7 @@ export const registerUser = (email,password) => async (dispatch) => {
 
         const { data } = await axios.post(
             '/api/v1/users/register',
-            { email, password },
+            { email, mobile, password },
             config
         );
         console.log(data)
@@ -90,11 +93,46 @@ export const registerUser = (email,password) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: REGISTER_USER_FAIL,
-            payload: error.response.data.message,
+            payload: {
+                status_code : error.response.status,
+                message : error.response.data.message
+            },
         });
     }
 };
+export const verifyUser = (email,otp) => async (dispatch) => {
+    try {
 
+        dispatch({ type: VERIFY_USER_REQUEST });
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+
+        const { data } = await axios.post(
+            '/api/v1/users/verifyUserByOTP',
+            { email, otp },
+            config
+        );
+        console.log(data)
+        dispatch({
+            type: VERIFY_USER_SUCCESS,
+            payload: data,
+        });
+
+    } catch (error) {
+        dispatch({
+            type: VERIFY_USER_FAIL,
+            payload: {
+                status_code : error.response.status,
+                message : error.response.data.message
+            },
+        });
+    }
+};
+/*
 // Load User
 export const loadUser = () => async (dispatch) => {
     try {
@@ -395,7 +433,7 @@ export const updatePassword = (passwords) => async (dispatch) => {
         });
     }
 };
-
+*/
 // Clear All Errors
 export const clearErrors = () => async (dispatch) => {
     dispatch({ type: CLEAR_ERRORS });

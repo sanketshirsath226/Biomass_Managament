@@ -21,6 +21,12 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
 
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
+
+    /*
+    TODO NEED TO FIX MOBILE NO BUG
+    1. APPEND MOBILE NUMBER WITH +91
+    */
+    const [mobile,setMobile] = useState("+91")
     const [confirmPassword , setConfirmPassword] = useState("");
     const dispatch = useDispatch();
 
@@ -28,9 +34,11 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
 
 
     useEffect(() => {
-        if(isAuthenticated){
+        if(isAuthenticated && message){
             console.log(message)
-            navigate('Login');
+            navigate('Otp',{ data : {
+                    email,
+                }});
         }
     }, [useDispatch,isAuthenticated,message]);
 
@@ -56,7 +64,7 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
         if(password !== confirmPassword){
             return;
         }
-        await dispatch(registerUser(email, password));
+        await dispatch(registerUser(email,mobile,password));
     }
 
     return (
@@ -97,8 +105,12 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
                         marginVertical: Spacing * 3,
                     }}
                 >
+
                     <AppTextInput name="email" placeholder="Email" value={email}  onChangeText = {(text) =>{
                         setEmail(text)
+                    }} />
+                    <AppTextInput name="mobile" placeholder="Mobile No" value={mobile}  onChangeText = {(text) =>{
+                        setMobile(text)
                     }} />
                     <AppTextInput name={"password"} placeholder="Password" value={password} key={'password'} onChangeText = {(text) =>{
                         setPassword(text)

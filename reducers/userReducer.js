@@ -43,30 +43,32 @@ import {
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
     USER_DETAILS_RESET,
-    USER_DETAILS_SUCCESS
+    USER_DETAILS_SUCCESS, VERIFY_USER_FAIL, VERIFY_USER_REQUEST, VERIFY_USER_SUCCESS
 } from "../constants/userConstants";
 
 
-export const userReducer = (state = { message:{},user: {} }, { type, payload }) => {
+export const userReducer = (state = { message:"",user: {} }, { type, payload }) => {
 
     switch (type) {
         case LOGIN_USER_REQUEST:
         case REGISTER_USER_REQUEST:
         case LOAD_USER_REQUEST:
+        case VERIFY_USER_REQUEST:
             return {
                 loading: true,
                 isAuthenticated: false,
             };
         case LOGIN_USER_SUCCESS:
+        case VERIFY_USER_SUCCESS:
         case LOAD_USER_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 isAuthenticated: true,
-                user: payload,
+                user: payload.user,
             };
         case REGISTER_USER_SUCCESS:
-            console.log(payload)
+            console.log(payload.message)
             return {
                 loading: false,
                 isAuthenticated: true,
@@ -78,6 +80,7 @@ export const userReducer = (state = { message:{},user: {} }, { type, payload }) 
                 user: null,
                 isAuthenticated: false,
             };
+        case VERIFY_USER_FAIL:
         case LOGIN_USER_FAIL:
         case REGISTER_USER_FAIL:
             return {

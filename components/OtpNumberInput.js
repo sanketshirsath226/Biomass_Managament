@@ -31,6 +31,7 @@ const OtpNumberInput = ({ ...otherProps }) => {
                 shadowRadius: Spacing,
             }
         ]}
+            {...otherProps}
         />
 
     )

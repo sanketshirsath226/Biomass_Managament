@@ -25,16 +25,30 @@ const LoginScreen = ({ navigation: { navigate } }) => {
     const [password, setPassword] = useState("");
 
     const handleLogin = async (e) => {
+        console.log('Hello')
         await dispatch(loginUser(email, password));
     }
 
 
     useEffect(() => {
-            if(user){
+            if(user && isAuthenticated){
                 console.log(user)
             }
-    }, [user,dispatch]);
+    }, [user,dispatch,isAuthenticated]);
 
+    useEffect(() => {
+        if(error){
+            if(error.status_code === 401){
+                console.log(error.message)
+            }else if(error.status_code === 402){
+                navigate("Otp",{ data : {
+                        email,
+                    }})
+            }else{
+                console.log(error.message)
+            }
+        }
+    }, [error,dispatch]);
     return (
         <SafeAreaView>
             <View

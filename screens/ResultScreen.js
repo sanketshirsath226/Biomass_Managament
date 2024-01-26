@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {View, Text, Button, SafeAreaView, ImageBackground, Dimensions, TouchableOpacity} from "react-native";
 import Spacing from "../constants/Spacing";
 import FontSize from "../constants/FontSize";
@@ -11,6 +11,14 @@ const { height } = Dimensions.get("window");
 const ResultScreen = ({ route , navigation: { navigate } }) => {
     // const [state, setState] = useState(false);
     const {success, message,title} = route.params.result
+
+    useEffect(() => {
+            if(success) {
+                console.log('/Dashboard')
+            }else{
+                navigate('Login')
+            }
+    }, [success]);
     return (
         <SafeAreaView>
             <View className={'h-full justify-center '}>
