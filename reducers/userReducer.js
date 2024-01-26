@@ -47,7 +47,7 @@ import {
 } from "../constants/userConstants";
 
 
-export const userReducer = (state = { message:"",user: {} }, { type, payload }) => {
+export const userReducer = (state = { message:"",token : "",user: {} }, { type, payload }) => {
 
     switch (type) {
         case LOGIN_USER_REQUEST:
@@ -66,9 +66,9 @@ export const userReducer = (state = { message:"",user: {} }, { type, payload }) 
                 loading: false,
                 isAuthenticated: true,
                 user: payload.user,
+                token : (payload.token) ? payload.token : this.token
             };
         case REGISTER_USER_SUCCESS:
-            console.log(payload.message)
             return {
                 loading: false,
                 isAuthenticated: true,
@@ -88,6 +88,7 @@ export const userReducer = (state = { message:"",user: {} }, { type, payload }) 
                 loading: false,
                 isAuthenticated: false,
                 user: null,
+                token : null,
                 error: payload,
             };
         case LOAD_USER_FAIL:
@@ -95,6 +96,7 @@ export const userReducer = (state = { message:"",user: {} }, { type, payload }) 
                 loading: false,
                 isAuthenticated: false,
                 user: null,
+                token : null,
                 error: payload,
             }
         case LOGOUT_USER_FAIL:
@@ -263,7 +265,7 @@ export const profileReducer = (state = {}, { type, payload }) => {
             return {
                 ...state,
                 loading: false,
-                isUpdated: payload,
+                isUpdated: payload.user,
             };
         case UPDATE_PROFILE_FAIL:
         case UPDATE_PROFILE_IMAGE_FAIL:

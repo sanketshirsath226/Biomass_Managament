@@ -132,14 +132,53 @@ export const verifyUser = (email,otp) => async (dispatch) => {
         });
     }
 };
-/*
-// Load User
-export const loadUser = () => async (dispatch) => {
+
+export const updateProfile = (name,role,location,token) => async (dispatch) => {
+    try {
+
+        dispatch({ type: UPDATE_PROFILE_REQUEST });
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth-token" : token
+            },
+        }
+        console.log(name,role,location)
+        const { data } = await axios.put(
+            '/api/v1/users/profile',
+            {name,role,location},
+            config
+        );
+
+        dispatch({
+            type: UPDATE_PROFILE_SUCCESS,
+            payload: data,
+        });
+
+    } catch (error) {
+        dispatch({
+            type: UPDATE_PROFILE_FAIL,
+            payload: {
+                status_code : error.response.status,
+                message : error.response.data.message
+            }
+        });
+    }
+};
+
+export const loadUser = (token) => async (dispatch) => {
     try {
 
         dispatch({ type: LOAD_USER_REQUEST });
 
-        const { data } = await axios.get('/api/v1/me');
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth-token" : token
+            },
+        }
+        const { data } = await axios.get('/api/v1/users/profile',config);
 
         dispatch({
             type: LOAD_USER_SUCCESS,
@@ -147,12 +186,20 @@ export const loadUser = () => async (dispatch) => {
         });
 
     } catch (error) {
+        console.log(error)
         dispatch({
             type: LOAD_USER_FAIL,
-            payload: error.response.data.message
+            payload: {
+                status_code : error.response.status,
+                message : error.response.data.message
+            }
         })
     }
 }
+
+
+/*
+// Load User
 
 // Logout User
 export const logoutUser = () => async (dispatch) => {
@@ -313,35 +360,7 @@ export const resetPassword = (token, password) => async (dispatch) => {
 };
 
 // Update User Profile
-export const updateProfile = (userData) => async (dispatch) => {
-    try {
 
-        dispatch({ type: UPDATE_PROFILE_REQUEST });
-
-        const config = {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        }
-
-        const { data } = await axios.put(
-            '/api/v1/update/profile',
-            userData,
-            config
-        );
-
-        dispatch({
-            type: UPDATE_PROFILE_SUCCESS,
-            payload: data.success,
-        });
-
-    } catch (error) {
-        dispatch({
-            type: UPDATE_PROFILE_FAIL,
-            payload: error.response.data.message,
-        });
-    }
-};
 
 // Update Profile Image
 export const updateProfileImage = (userData) => async (dispatch) => {

@@ -32,6 +32,10 @@ const LoginScreen = ({ navigation: { navigate } }) => {
 
     useEffect(() => {
             if(user && isAuthenticated){
+                if(!user?.name){
+                    console.log('Entered')
+                    navigate('SetUp')
+                }
                 console.log(user)
             }
     }, [user,dispatch,isAuthenticated]);

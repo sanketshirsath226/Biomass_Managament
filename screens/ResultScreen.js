@@ -14,7 +14,7 @@ const ResultScreen = ({ route , navigation: { navigate } }) => {
 
     useEffect(() => {
             if(success) {
-                console.log('/Dashboard')
+                navigate('SetUp')
             }else{
                 navigate('Login')
             }
