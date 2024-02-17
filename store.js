@@ -6,10 +6,12 @@ import {
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {profileReducer, userReducer} from './reducers/userReducer';
+import {HarvestorDashboardReducer} from "./reducers/dsahboardReducer";
 
 const reducer = combineReducers({
     user: userReducer,
     profile: profileReducer,
+    harvestDashboard : HarvestorDashboardReducer
 });
 
 const store = createStore(

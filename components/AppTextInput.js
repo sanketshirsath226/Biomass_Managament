@@ -43,4 +43,6 @@ const AppTextInput = ({ ...otherProps }) => {
 
 export default AppTextInput;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+
+});

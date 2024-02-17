@@ -45,6 +45,7 @@ import {
     USER_DETAILS_RESET,
     USER_DETAILS_SUCCESS, VERIFY_USER_FAIL, VERIFY_USER_REQUEST, VERIFY_USER_SUCCESS
 } from "../constants/userConstants";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export const userReducer = (state = { message:"",token : "",user: {} }, { type, payload }) => {
@@ -66,7 +67,7 @@ export const userReducer = (state = { message:"",token : "",user: {} }, { type, 
                 loading: false,
                 isAuthenticated: true,
                 user: payload.user,
-                token : (payload.token) ? payload.token : this.token
+                token :(payload.token) ? payload.token : this.token
             };
         case REGISTER_USER_SUCCESS:
             return {

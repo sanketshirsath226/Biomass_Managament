@@ -35,6 +35,7 @@ import {
     USER_DETAILS_SUCCESS, VERIFY_USER_FAIL, VERIFY_USER_REQUEST, VERIFY_USER_SUCCESS
 } from "../constants/userConstants";
 import axios from '../config/axiosConfig';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Login User
 export const loginUser = (email, password) => async (dispatch) => {
@@ -51,6 +52,8 @@ export const loginUser = (email, password) => async (dispatch) => {
             { email, password },
             config
         );
+
+        await AsyncStorage.setItem('token', (data.token) ? data.token : this.token);
 
         dispatch({
             type: LOGIN_USER_SUCCESS,

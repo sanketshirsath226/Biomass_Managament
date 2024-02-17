@@ -14,12 +14,13 @@ import Font from "../constants/Font";
 import { Ionicons } from "@expo/vector-icons";
 import AppTextInput from "../components/AppTextInput";
 import {useDispatch, useSelector} from "react-redux";
-import {loginUser} from "../action/userAction";
+import {loadUser, loginUser} from "../action/userAction";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation: { navigate } }) => {
     const dispatch = useDispatch();
 
-    const { loading, isAuthenticated, error, user } = useSelector((state) => state.user);
+    const { loading, isAuthenticated, error, user,token } = useSelector((state) => state.user);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -29,6 +30,17 @@ const LoginScreen = ({ navigation: { navigate } }) => {
         await dispatch(loginUser(email, password));
     }
 
+    const getToken = async () =>{
+        return await AsyncStorage.getItem("token")
+    }
+
+    useEffect(() => {
+        const token = getToken()
+        console.log(token)
+        if(token){
+            loadUser(token)
+        }
+    }, [token]);
 
     useEffect(() => {
             if(user && isAuthenticated){
@@ -36,7 +48,7 @@ const LoginScreen = ({ navigation: { navigate } }) => {
                     console.log('Entered')
                     navigate('SetUp')
                 }
-                console.log(user)
+                navigate('Prediction');
             }
     }, [user,dispatch,isAuthenticated]);
 
@@ -233,4 +245,3 @@ const LoginScreen = ({ navigation: { navigate } }) => {
 
 export default LoginScreen;
 
-const styles = StyleSheet.create({});
