@@ -21,7 +21,7 @@ import policies from "../constants/Policies";
 // SubsidyCard component
 
 
-const DashboardScreen = ({ navigation }) => {
+const RDashboardScreen = ({ navigation }) => {
     const [year, setYear] = useState('');
     const [amount, setAmount] = useState('');
 
@@ -110,14 +110,14 @@ const DashboardScreen = ({ navigation }) => {
                     <View style={styles.card}>
                         <Text style={styles.cardHeading}>Income</Text>
                         <Text style={styles.cardNumber}>$50,000</Text>
-                        <Text style={styles.cardDescription}>Amount</Text>
+                        <Text style={styles.cardDescription}>Amount: $20,000</Text>
                     </View>
 
                     <Text style={styles.sectionHeading}>Yearly Waste</Text>
                     <View style={styles.card}>
                         <Text style={styles.cardHeading}>Waste</Text>
                         <Text style={styles.cardNumber}>15,000 tons</Text>
-                        <Text style={styles.cardDescription}></Text>
+                        <Text style={styles.cardDescription}>Amount: $10,000</Text>
                     </View>
 
                     <Text style={styles.sectionHeading}>Biomass Chart</Text>
@@ -386,4 +386,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default DashboardScreen;
+export default RDashboardScreen;

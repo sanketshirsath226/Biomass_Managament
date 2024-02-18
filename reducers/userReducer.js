@@ -80,6 +80,7 @@ export const userReducer = (state = { message:"",token : "",user: {} }, { type, 
                 loading: false,
                 user: null,
                 isAuthenticated: false,
+                token : ""
             };
         case VERIFY_USER_FAIL:
         case LOGIN_USER_FAIL:
@@ -115,6 +116,7 @@ export const userReducer = (state = { message:"",token : "",user: {} }, { type, 
             return state;
     }
 }
+
 
 export const forgotPasswordReducer = (state = {}, { type, payload }) => {
     switch (type) {

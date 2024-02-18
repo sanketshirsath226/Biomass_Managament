@@ -18,7 +18,35 @@ const { height } = Dimensions.get("window");
 const WelcomeScreen = ({ navigation: { navigate } }) => {
     return (
         <SafeAreaView className={''}>
-            <View className={'h-full justify-center '}>
+            <View className={'h-full justify-center'}>
+                <View style={{
+                    flexDirection : 'row',
+                    width : '100%',
+                    alignItems:'center',
+                    justifyContent : 'center'
+                }}>
+
+                    <Text
+                        style={{
+                            fontSize: FontSize.medium * 3,
+                            color: '#ff8911',
+                            fontFamily: Font["poppins-bold"],
+                            textAlign: "center",
+                        }}
+                    >
+                        Bio
+                    </Text>
+                    <Text
+                        style={{
+                            fontSize: FontSize.xLarge * 2,
+                            color: Colors.primary,
+                            fontFamily: Font["poppins-bold"],
+                            textAlign: "center",
+                        }}
+                    >
+                        सेवक
+                    </Text>
+                </View>
                 <ImageBackground
                     style={{
                         height: height / 2.5,
@@ -32,29 +60,18 @@ const WelcomeScreen = ({ navigation: { navigate } }) => {
                         paddingTop: Spacing * 4,
                     }}
                 >
-                    <Text
-                        style={{
-                            fontSize: FontSize.xxLarge,
-                            color: Colors.primary,
-                            fontFamily: Font["poppins-bold"],
-                            textAlign: "center",
-                        }}
-                    >
-                        Discover Your Biomass waste here
 
-                    </Text>
 
                     <Text
                         style={{
-                            fontSize: FontSize.small,
+                            fontSize: FontSize.xmedium,
                             color: Colors.text,
                             fontFamily: Font["poppins-regular"],
                             textAlign: "center",
-                            marginTop: Spacing * 2,
                         }}
                     >
-                        Explore all the existing job roles based or your interest and study
-                        major
+                        Where Waste Meets Energy
+
                     </Text>
                 </View>
                 <View
@@ -97,7 +114,7 @@ const WelcomeScreen = ({ navigation: { navigate } }) => {
                         style={{
                             paddingVertical: Spacing * 1.5,
                             paddingHorizontal: Spacing * 2,
-                            width: "48%",
+                            width: "50%",
                             borderRadius: Spacing,
                         }}
                     >

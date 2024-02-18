@@ -15,33 +15,33 @@ import { Feather } from '@expo/vector-icons';
 import Geolib from 'geolib';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Navbar from "../components/Navbar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Spacing from "../constants/Spacing";
-import {Dimensions as SyncStorage} from "react-native-web/src";
 import {loadUser} from "../action/userAction";
 import {useSelector} from "react-redux";
 
 // Sample depots data
 const depots = [
-    { id: 1, name: 'Depot A', location: { latitude: 37.788, longitude: -122.432 }, demand: 'High' },
-    { id: 2, name: 'Depot B', location: { latitude: 37.798, longitude: -122.422 }, demand: 'Medium' },
-    { id: 3, name: 'Depot C', location: { latitude: 37.778, longitude: -122.442 }, demand: 'Low' },
+    { id: 1, name: 'Depot A', location: { latitude: 24.66818, longitude: 71.33144 }, demand: 'High' },
+    { id: 2, name: 'Depot B', location: { latitude: 24.58758, longitude: 71.57031 }, demand: 'Medium' },
+    { id: 3, name: 'Depot C', location: { latitude: 24.58758, longitude: 71.96844 }, demand: 'Low' },
 ];
 
 const farms = [
     {
-        name: 'Farm 1',
+        name: 'Depot 1',
         info: 'A sustainable organic farm with a variety of crops.',
         crops: 'Wheat, Corn, Tomatoes',
         size: '50 acres',
     },
     {
-        name: 'Farm 2',
+        name: 'Depot 2',
         info: 'Family-owned farm producing fresh vegetables.',
         crops: 'Carrots, Lettuce, Potatoes',
         size: '30 acres',
     },
     {
-        name: 'Farm 3',
+        name: 'Depot 3',
         info: 'Specialized farm with vineyards and orchards.',
         crops: 'Grapes, Apples, Pears',
         size: '40 acres',
@@ -72,6 +72,12 @@ const NavigationMap = ({navigation: { navigate } }) => {
         // Implement navigation to Settings
     };
 
+    // useEffect(async () => {
+    //     const token = await AsyncStorage.get('token');
+    //     if(token){
+    //         loadUser(token)
+    //     }
+    // }, []);
 
 
     return (
@@ -80,8 +86,8 @@ const NavigationMap = ({navigation: { navigate } }) => {
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
                 region={{
-                    latitude: 37.78825,
-                    longitude: -122.4324,
+                    latitude: 24.66818,
+                    longitude: 71.33144,
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                 }}

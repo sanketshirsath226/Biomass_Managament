@@ -1,5 +1,5 @@
 import {
-    SafeAreaView,
+    SafeAreaView, ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -69,7 +69,7 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
 
     return (
         <SafeAreaView>
-            <View
+            <ScrollView
                 style={{
                     padding: Spacing * 2,
                 }}
@@ -112,10 +112,10 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
                     <AppTextInput name="mobile" placeholder="Mobile No" value={mobile}  onChangeText = {(text) =>{
                         setMobile(text)
                     }} />
-                    <AppTextInput name={"password"} placeholder="Password" value={password} key={'password'} onChangeText = {(text) =>{
+                    <AppTextInput name={"password"} secureTextEntry={true} placeholder="Password" value={password} key={'password'} onChangeText = {(text) =>{
                         setPassword(text)
                     }} />
-                    <AppTextInput name={"confirm Password"}  placeholder="Confirm Password" value={confirmPassword} onChangeText = {(text) =>{
+                    <AppTextInput name={"confirm Password"} secureTextEntry={true}  placeholder="Confirm Password" value={confirmPassword} onChangeText = {(text) =>{
                         setConfirmPassword(text)
                     }} />
 
@@ -234,7 +234,7 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };

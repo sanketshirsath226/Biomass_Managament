@@ -47,7 +47,19 @@ const SetUpScreen = ({ navigation: { navigate } }) => {
         if (isUpdated && token) {
             console.log("Profile Updated");
             dispatch(loadUser(token));
-            console.log('Dashboard')
+            if(user.role === 'harvester'){
+                navigate('Dashboard')
+                return
+            }
+            if(user.role === 'refinery'){
+                navigate('Dashboard')
+                return
+            }
+
+            if(user.role === 'depot'){
+                navigate('Dashboard')
+                return
+            }
             dispatch({ type: UPDATE_PROFILE_RESET });
         }
     }, [dispatch, user, error, isUpdated]);

@@ -1,31 +1,43 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, Platform, StatusBar} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    ScrollView,
+    TouchableOpacity,
+    Modal,
+    Platform,
+    StatusBar,
+    TextInput
+} from 'react-native';
 import * as Progress from 'react-native-progress';
 import Navbar from "../components/Navbar";
 import Spacing from "../constants/Spacing";
 import {useDispatch, useSelector} from "react-redux";
 import {predictBiomasss} from "../action/dashboardAction";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {getAllDepots, loadUser} from "../action/userAction";
+import {getAllDepots, getAllRefinery, loadUser} from "../action/userAction";
 
-const PredictionScreen = ({navigation: { navigate } }) => {
+const DPredictionScreen = ({navigation: { navigate } }) => {
 
     const [predictedBiomass,setPredictedBiomass] = useState("")
     const { biomassPrediction,error,loading } = useSelector((state) => state.harvestDashboard);
-    const {depots} = useSelector((state) => state.depot);
+    const {refinery} = useSelector((state) => state.refinery);
     const getToken = async () =>{
         return await AsyncStorage.getItem("token")
     }
+
+    const [demand,setDemand] = useState("")
 
     const dispatch = useDispatch()
     const { token,user,isAuthenticated } = useSelector((state) => state.user);
 
     const fetchDepots = async () =>{
-        await dispatch(getAllDepots())
+        await dispatch(getAllRefinery())
     }
     useEffect(() => {
-        if(depots){
-            console.log(depots)
+        if(refinery){
+            console.log(refinery)
         }
         fetchDepots()
     }, []);
@@ -120,12 +132,35 @@ const PredictionScreen = ({navigation: { navigate } }) => {
                 <Text style={styles.infoBtn} onPress={openModal}>Info</Text>
             </View>
 
-            <Text style={styles.depotHeading}>Nearest Depots</Text>
+            <View style={styles.predictionCard}>
+                <View style={styles.inputSection}>
+                    <Text style={styles.sectionHeading}>
+                        Add Demand
+                    </Text>
+                    <TextInput
+                        keyboardType={'numeric'}
+                        placeholder="Demand"
+                        style={styles.input}
+                        value={demand}
+                        onChangeText={(text) => setDemand(text)}
+                    />
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={()=>{
+                                alert("Submitted")
+                                setDemand("")
+                        }}>
+                        <Text style={styles.buttonText}>Submit</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <Text style={styles.depotHeading}>Nearest Refinery</Text>
 
 
             {/* Slider Cards for Nearest Depots */}
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.depotSlider}>
-                {depots?depots.map((depot, index) => (
+                {refinery?refinery.map((depot, index) => (
                     <View
                         key={index}
                         style={styles.sliderCard}// You may want to pass depot data to the modal
@@ -134,7 +169,7 @@ const PredictionScreen = ({navigation: { navigate } }) => {
                         <Text style={styles.sliderLocation}>{depot.location.latitude}</Text>
                         <Text style={styles.sliderLocation}>{depot.location.longitude}</Text>
                         <TouchableOpacity style={styles.sliderContactBtn} onPress={()=>onHandleSelectDepot(depot._id)}>
-                            <Text style={styles.modalButtonText}>Select Depots</Text>
+                            <Text style={styles.modalButtonText}>Select Refinary</Text>
                         </TouchableOpacity>
                     </View>
                 )):null}
@@ -153,7 +188,7 @@ const PredictionScreen = ({navigation: { navigate } }) => {
                         <Text style={styles.modalText}>Location: Depot Location</Text>
                         <Text style={styles.modalText}>Additional Info: Faint and Small</Text>
                         <TouchableOpacity style={styles.modalButton} onPress={onHandleSelectDepot}>
-                            <Text style={styles.modalButtonText}>Contact</Text>
+                            <Text style={styles.modalButtonText}>Prediction</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
                             <Text style={styles.modalCloseButtonText}>Close</Text>
@@ -177,6 +212,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#4CAF50', // Green color
         padding: 10,
         width: '100%',
+
+
         height: 50,
     },
     menuIcon: {
@@ -231,6 +268,26 @@ const styles = StyleSheet.create({
     },
     bold: {
         fontWeight: 'bold',
+    },
+    inputSection: {
+        marginBottom: 20,
+    },
+    input: {
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        padding: 10,
+        marginBottom: 10,
+    },
+    button: {
+        backgroundColor: '#4CAF50',
+        padding: 10,
+        borderRadius: 8,
+        paddingBottom: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 14,
     },
     positive: {
         color: 'green',
@@ -340,4 +397,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PredictionScreen;
+export default DPredictionScreen;

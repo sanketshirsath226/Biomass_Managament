@@ -2,31 +2,12 @@ import { useState} from 'react';
 import { Drawer } from 'react-native-paper';
 import {Platform, StatusBar, StyleSheet} from "react-native";
 import Spacing from "../constants/Spacing";
+import ProfileCard from "./ProfileCard";
+// import ProfileCard from "./ProfileCard";
 
-const NavDrawer = () => {
+const NavDrawer = ({route , navigation}) => {
   const [active, setActive] = useState("")
-  const navBarElement = [
-      {
-          name : "Dashboard",
-          navigate : "Dashboard"
-      },
-      {
-          name : "Prediction",
-          navigate : "Prediction"
-      },
-      {
-          name : "Map",
-          navigate : "Map"
-      },
-      {
-          name : "Profile",
-          navigate : "Profile"
-      },
-      {
-          name : "History",
-          navigate : "History"
-      }
-  ];
+  const {navBarElement} = route.params
 
   const renderElement = navBarElement.map((element,index)=>{
       return (
@@ -34,14 +15,19 @@ const NavDrawer = () => {
               key={index}
               label={element.name}
               active={active === element.name}
-              onPress={() => setActive(element.name)}
+              rippleColor = "#D5F0C1"
+              onPress={() => {navigation.navigate(element.navigate)}}
           />
       )
   })
   return (
-    <Drawer.Section  style={styles.drawerContainer}>
-        {renderElement}
-    </Drawer.Section>
+      <>
+          <ProfileCard/>
+          <Drawer.Section  style={styles.drawerContainer} >
+              {renderElement}
+          </Drawer.Section>
+      </>
+
   );
 };
 
@@ -49,7 +35,8 @@ const NavDrawer = () => {
 const styles = StyleSheet.create({
     drawerContainer : {
             flex : 1,
-            width : '75%',
+            marginTop : '10%',
+            width : '100%',
             paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + Spacing : null,
             backgroundColor: '#f8f8f8',
     }

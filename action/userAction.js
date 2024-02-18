@@ -9,6 +9,10 @@ import {
     FORGOT_PASSWORD_FAIL,
     FORGOT_PASSWORD_REQUEST,
     FORGOT_PASSWORD_SUCCESS,
+    GET_ALL_DEPOTS_FAIL,
+    GET_ALL_DEPOTS_REQUEST,
+    GET_ALL_DEPOTS_SUCCESS, GET_ALL_REFINERY_FAIL,
+    GET_ALL_REFINERY_REQUEST, GET_ALL_REFINERY_SUCCESS,
     LOAD_USER_FAIL,
     LOAD_USER_REQUEST,
     LOAD_USER_SUCCESS,
@@ -22,17 +26,25 @@ import {
     REGISTER_USER_SUCCESS,
     RESET_PASSWORD_FAIL,
     RESET_PASSWORD_REQUEST,
-    RESET_PASSWORD_SUCCESS, UPDATE_COVER_IMAGE_FAIL, UPDATE_COVER_IMAGE_REQUEST, UPDATE_COVER_IMAGE_SUCCESS,
+    RESET_PASSWORD_SUCCESS,
+    UPDATE_COVER_IMAGE_FAIL,
+    UPDATE_COVER_IMAGE_REQUEST,
+    UPDATE_COVER_IMAGE_SUCCESS,
     UPDATE_PASSWORD_FAIL,
     UPDATE_PASSWORD_REQUEST,
     UPDATE_PASSWORD_SUCCESS,
-    UPDATE_PROFILE_FAIL, UPDATE_PROFILE_IMAGE_FAIL, UPDATE_PROFILE_IMAGE_REQUEST,
+    UPDATE_PROFILE_FAIL,
+    UPDATE_PROFILE_IMAGE_FAIL,
+    UPDATE_PROFILE_IMAGE_REQUEST,
     UPDATE_PROFILE_IMAGE_SUCCESS,
     UPDATE_PROFILE_REQUEST,
     UPDATE_PROFILE_SUCCESS,
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
-    USER_DETAILS_SUCCESS, VERIFY_USER_FAIL, VERIFY_USER_REQUEST, VERIFY_USER_SUCCESS
+    USER_DETAILS_SUCCESS,
+    VERIFY_USER_FAIL,
+    VERIFY_USER_REQUEST,
+    VERIFY_USER_SUCCESS
 } from "../constants/userConstants";
 import axios from '../config/axiosConfig';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -182,7 +194,7 @@ export const loadUser = (token) => async (dispatch) => {
             },
         }
         const { data } = await axios.get('/api/v1/users/profile',config);
-
+        console.log(data)
         dispatch({
             type: LOAD_USER_SUCCESS,
             payload: data.user,
@@ -200,6 +212,76 @@ export const loadUser = (token) => async (dispatch) => {
     }
 }
 
+// Get All Depots
+
+export const getAllDepots = () => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_ALL_DEPOTS_REQUEST });
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+        const { data } = await axios.get('/api/v1/depots/getAllDepots',config);
+
+        dispatch({
+            type: GET_ALL_DEPOTS_SUCCESS,
+            payload: data.depots,
+        });
+
+    } catch (error) {
+        console.log(error)
+        dispatch({
+            type: GET_ALL_DEPOTS_FAIL,
+            payload: {
+                status_code : error.response.status,
+                message : error.response.data.message
+            }
+        })
+    }
+}
+export const getAllRefinery = () => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_ALL_REFINERY_REQUEST });
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+        const { data } = await axios.get('/api/v1/refinery/getRefinery',config);
+
+        dispatch({
+            type: GET_ALL_REFINERY_SUCCESS,
+            payload: data.refinery,
+        });
+
+    } catch (error) {
+        console.log(error)
+        dispatch({
+            type: GET_ALL_REFINERY_FAIL,
+            payload: {
+                status_code : error.response.status,
+                message : error.response.data.message
+            }
+        })
+    }
+}
+
+export const logoutUser = () => async (dispatch) => {
+    try {
+        // await axios.get('/api/v1/logout');
+        dispatch({ type: LOGOUT_USER_SUCCESS });
+    } catch (error) {
+        dispatch({
+            type: LOGOUT_USER_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
 
 /*
 // Load User

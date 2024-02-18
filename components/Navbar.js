@@ -10,10 +10,12 @@ import Colors from "../constants/Colors";
 import Font from "../constants/Font";
 import Spacing from "../constants/Spacing";
 import {useNavigation} from "@react-navigation/native";
-const Navbar = ({logo,title,ham}) => {
+const Navbar = ({logo,title,ham,navBarElement}) => {
     const navigation = useNavigation();
     const handleHamPress = () => {
-       navigation.navigate('drawer')
+       navigation.navigate('drawer',{
+           navBarElement
+       })
     };
     return (
         <>

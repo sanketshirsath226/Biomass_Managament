@@ -1,5 +1,5 @@
 import {
-    SafeAreaView,
+    SafeAreaView, ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -47,8 +47,15 @@ const LoginScreen = ({ navigation: { navigate } }) => {
                 if(!user?.name){
                     console.log('Entered')
                     navigate('SetUp')
+                    return
                 }
-                navigate('Prediction');
+                if(user.role == 'depot'){
+                    navigate('Dashboard')
+                }else if(user.role == 'harvester'){
+                    navigate('Dashboard');
+                }else{
+                    navigate('Prediction')
+                }
             }
     }, [user,dispatch,isAuthenticated]);
 
@@ -67,7 +74,7 @@ const LoginScreen = ({ navigation: { navigate } }) => {
     }, [error,dispatch]);
     return (
         <SafeAreaView>
-            <View
+            <ScrollView
                 style={{
                     padding: Spacing * 2,
                 }}
@@ -106,7 +113,7 @@ const LoginScreen = ({ navigation: { navigate } }) => {
                     <AppTextInput placeholder="Email" value={email} onChangeText = {(e) =>{
                         setEmail(e)
                     }} />
-                    <AppTextInput placeholder="Password" value={password} onChangeText = {(e) =>{
+                    <AppTextInput placeholder="Password" secureTextEntry={true} value={password} onChangeText = {(e) =>{
                         setPassword(e)
                     }} />
                 </View>
@@ -238,7 +245,7 @@ const LoginScreen = ({ navigation: { navigate } }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };
