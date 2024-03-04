@@ -28,8 +28,8 @@ const SetUpScreen = ({ navigation: { navigate } }) => {
     const { error, isUpdated, loading } = useSelector((state) => state.profile);
 
     const [name,setName] = useState("");
-    const [role,setRole]  =useState("");
-    const [location, setLocation] = useState("");
+    const [role,setRole]  =useState("harvester");
+    const [location, setLocation] = useState("24.58758,71.88882");
 
 
     useEffect(() => {

@@ -26,7 +26,7 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
     TODO NEED TO FIX MOBILE NO BUG
     1. APPEND MOBILE NUMBER WITH +91
     */
-    const [mobile,setMobile] = useState("+91")
+    const [mobile,setMobile] = useState("")
     const [confirmPassword , setConfirmPassword] = useState("");
     const dispatch = useDispatch();
 
