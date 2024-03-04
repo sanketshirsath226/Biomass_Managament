@@ -18,8 +18,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import SubsidyCard from "../components/SubsidyCard";
 import policies from "../constants/Policies";
 
-// SubsidyCard component
-
 
 const DashboardScreen = ({ navigation }) => {
     const [year, setYear] = useState('');
