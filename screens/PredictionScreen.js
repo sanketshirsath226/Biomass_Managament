@@ -12,6 +12,7 @@ import Colors from '../constants/Colors';
 import FontSize from '../constants/FontSize';
 import RNPickerSelect from 'react-native-picker-select';
 import { PREDCIT_BIOMASS_RESET } from '../constants/dashboardConstants';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 const PredictionScreen = ({navigation: { navigate } }) => {
 
@@ -28,7 +29,7 @@ const PredictionScreen = ({navigation: { navigate } }) => {
     ]
     const dispatch = useDispatch()
     const { token,user,isAuthenticated } = useSelector((state) => state.user);
-
+    const [selectedDepot,setSelectedDepot] = useState(null);
     const fetchDepots = async () =>{
         console.log('Fetching Depots ')
         await dispatch(getNearestDepots(token))
@@ -92,9 +93,9 @@ const PredictionScreen = ({navigation: { navigate } }) => {
         setModalVisible(false);
     };
 
-    const onHandleSelectDepot = (depotId) => {
-        // Implement your contact functionality here
-
+    const onHandleSelectDepot = (depot) => {
+        setSelectedDepot(depot)
+        openModal()
     };
 
     return (
@@ -140,7 +141,7 @@ const PredictionScreen = ({navigation: { navigate } }) => {
                         />
                        
                     </View>
-                 <TouchableOpacity style={styles.sliderContactBtn} onPress={fetchPredictionBiomass}>
+                 <TouchableOpacity style={{...styles.sliderContactBtn, padding: Spacing * 2}} onPress={fetchPredictionBiomass}>
                             <Text style={styles.sliderContactBtnText}>Prediction</Text>
                         </TouchableOpacity>
                 </>
@@ -178,7 +179,9 @@ const PredictionScreen = ({navigation: { navigate } }) => {
                         <Text style={styles.sliderHeading}>{depot.name}</Text>
                         <Text style={styles.sliderLocation}>{depot.location.latitude}</Text>
                         <Text style={styles.sliderLocation}>{depot.location.longitude}</Text>
-                        <TouchableOpacity style={styles.sliderContactBtn} onPress={()=>onHandleSelectDepot(depot._id)}>
+                        <TouchableOpacity style={styles.sliderContactBtn} onPress={()=>{
+                            onHandleSelectDepot(depot)
+                            }}>
                             <Text style={styles.modalButtonText}>Select Depots</Text>
                         </TouchableOpacity>
                     </View>
@@ -186,6 +189,7 @@ const PredictionScreen = ({navigation: { navigate } }) => {
             </ScrollView>
 
             {/* Modal for Depot Information */}
+            {selectedDepot?
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -194,9 +198,29 @@ const PredictionScreen = ({navigation: { navigate } }) => {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalHeading}>Depot Name</Text>
-                        <Text style={styles.modalText}>Location: Depot Location</Text>
-                        <Text style={styles.modalText}>Additional Info: Faint and Small</Text>
+                        <Text style={styles.modalHeading}>{selectedDepot.name}</Text>
+                        <Text style={styles.sliderLocation}>{"Latitude:"+selectedDepot.location.latitude}</Text>
+                        <Text style={styles.sliderLocation}>{"Longitude:"+selectedDepot.location.longitude}</Text>
+                        <MapView
+                            style={styles.map}
+                            provider={PROVIDER_GOOGLE}
+                            region={{
+                                latitude: parseFloat(selectedDepot.location.latitude),
+                                longitude:  parseFloat(selectedDepot.location.longitude),
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421,
+                            }}
+                        >
+                            <Marker
+                                key={selectedDepot._id}
+                                coordinate={{
+                                    latitude : parseFloat(selectedDepot.location.latitude),
+                                    longitude : parseFloat(selectedDepot.location.longitude)
+                                }}
+                                title={selectedDepot.name}
+                            />
+                        </MapView>
+                        <Text style={styles.sliderLocation}>{"Distance: "+selectedDepot.shortest_node[0]}</Text>
                         <TouchableOpacity style={styles.modalButton} onPress={onHandleSelectDepot}>
                             <Text style={styles.modalButtonText}>Contact</Text>
                         </TouchableOpacity>
@@ -205,7 +229,7 @@ const PredictionScreen = ({navigation: { navigate } }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+            </Modal>:""}
         </ScrollView>
     );
 };
@@ -223,6 +247,10 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '100%',
         height: 50,
+    },
+    map: {
+        width: '100%',
+        height: '60%',
     },
     menuIcon: {
         fontSize: 24,
@@ -326,7 +354,7 @@ const styles = StyleSheet.create({
     },
     sliderContactBtn: {
         backgroundColor: '#4CAF50',
-        padding: Spacing * 2,
+        padding: Spacing ,
         borderRadius: 4,
         alignSelf: 'flex-start',
         width: 100, // Small width for the contact button
@@ -364,7 +392,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 8,
         alignSelf: 'flex-start',
-        marginTop: 10,
+        marginTop: 0,
     },
     modalButtonText: {
         color: '#fff',

@@ -22,6 +22,7 @@ import Colors from '../constants/Colors';
 import FontSize from '../constants/FontSize';
 import RNPickerSelect from 'react-native-picker-select';
 import { PREDCIT_BIOMASS_RESET } from '../constants/dashboardConstants';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 const DPredictionScreen = ({navigation: { navigate } }) => {
 
     const [predictedBiomass,setPredictedBiomass] = useState("")
@@ -40,6 +41,8 @@ const DPredictionScreen = ({navigation: { navigate } }) => {
     const fetchRefinery = async () =>{
         await dispatch(getNearestRefinery(token))
     }
+
+    const [selectedRefinery,setSelectedRefinery] = useState("")
     const predictionYear = [
         { label: "2018", value: "2018" },
         { label: "2019", value: "2019" },
@@ -104,9 +107,9 @@ const DPredictionScreen = ({navigation: { navigate } }) => {
         setModalVisible(false);
     };
 
-    const onHandleSelectDepot = (depotId) => {
-        // Implement your contact functionality here
-
+    const onHandleSelectDepot = (refinery) => {
+        setSelectedRefinery(refinery)
+        openModal()
     };
 
     return (
@@ -152,7 +155,7 @@ const DPredictionScreen = ({navigation: { navigate } }) => {
                         />
                        
                     </View>
-                 <TouchableOpacity style={styles.sliderContactBtn} onPress={fetchPredictionBiomass}>
+                 <TouchableOpacity style={{...styles.sliderContactBtn, padding: Spacing * 2}} onPress={fetchPredictionBiomass}>
                             <Text style={styles.sliderContactBtnText}>Prediction</Text>
                         </TouchableOpacity>
                 </>
@@ -206,44 +209,68 @@ const DPredictionScreen = ({navigation: { navigate } }) => {
             {/* Slider Cards for Nearest Depots */}
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.depotSlider}>
                 {refinery?refinery.map((depot, index) => (
-                    <View
-                        key={index}
-                        style={styles.sliderCard}// You may want to pass depot data to the modal
-                    >
-                        <Text style={styles.sliderHeading}>{depot.name}</Text>
-                        <Text style={styles.sliderLocation}>{depot.location.latitude}</Text>
-                        <Text style={styles.sliderLocation}>{depot.location.longitude}</Text>
-                        <TouchableOpacity style={styles.sliderContactBtn} onPress={()=>onHandleSelectDepot(depot._id)}>
-                            <Text style={styles.modalButtonText}>Select Refinary</Text>
-                        </TouchableOpacity>
-                    </View>
-                )):null}
-            </ScrollView>
+                     <View
+                     key={index}
+                     style={styles.sliderCard}// You may want to pass depot data to the modal
+                 >
+                     <Text style={styles.sliderHeading}>{depot.name}</Text>
+                     <Text style={styles.sliderLocation}>{depot.location.latitude}</Text>
+                     <Text style={styles.sliderLocation}>{depot.location.longitude}</Text>
+                     <TouchableOpacity style={styles.sliderContactBtn} onPress={()=>{
+                         onHandleSelectDepot(depot)
+                         }}>
+                         <Text style={styles.modalButtonText}>Select Depots</Text>
+                     </TouchableOpacity>
+                 </View>
+             )):null}
+         </ScrollView>
 
-            {/* Modal for Depot Information */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={closeModal}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalHeading}>Depot Name</Text>
-                        <Text style={styles.modalText}>Location: Depot Location</Text>
-                        <Text style={styles.modalText}>Additional Info: Faint and Small</Text>
-                        <TouchableOpacity style={styles.modalButton} onPress={onHandleSelectDepot}>
-                            <Text style={styles.modalButtonText}>Prediction</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
-                            <Text style={styles.modalCloseButtonText}>Close</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
+         {/* Modal for Depot Information */}
+         {selectedRefinery?
+         <Modal
+             animationType="slide"
+             transparent={true}
+             visible={modalVisible}
+             onRequestClose={closeModal}
+         >
+             <View style={styles.modalContainer}>
+                 <View style={styles.modalContent}>
+                     <Text style={styles.modalHeading}>{selectedRefinery.name}</Text>
+                     <Text style={styles.sliderLocation}>{"Latitude:"+selectedRefinery.location.latitude}</Text>
+                     <Text style={styles.sliderLocation}>{"Longitude:"+selectedRefinery.location.longitude}</Text>
+                     <MapView
+                         style={styles.map}
+                         provider={PROVIDER_GOOGLE}
+                         region={{
+                             latitude: parseFloat(selectedRefinery.location.latitude),
+                             longitude:  parseFloat(selectedRefinery.location.longitude),
+                             latitudeDelta: 0.0922,
+                             longitudeDelta: 0.0421,
+                         }}
+                     >
+                         <Marker
+                             key={selectedRefinery._id}
+                             coordinate={{
+                                 latitude : parseFloat(selectedRefinery.location.latitude),
+                                 longitude : parseFloat(selectedRefinery.location.longitude)
+                             }}
+                             title={selectedRefinery.name}
+                         />
+                     </MapView>
+                     <Text style={styles.sliderLocation}>{"Distance: "+selectedRefinery.shortest_node[0]}</Text>
+                     <TouchableOpacity style={styles.modalButton} onPress={onHandleSelectDepot}>
+                         <Text style={styles.modalButtonText}>Contact</Text>
+                     </TouchableOpacity>
+                     <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
+                         <Text style={styles.modalCloseButtonText}>Close</Text>
+                     </TouchableOpacity>
+                 </View>
+             </View>
+         </Modal>:""}
         </ScrollView>
     );
 };
+
 
 const styles = StyleSheet.create({
     AndroidSafeArea: {
@@ -257,9 +284,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#4CAF50', // Green color
         padding: 10,
         width: '100%',
-
-
         height: 50,
+    },
+    map: {
+        width: '100%',
+        height: '60%',
     },
     menuIcon: {
         fontSize: 24,
@@ -314,26 +343,6 @@ const styles = StyleSheet.create({
     bold: {
         fontWeight: 'bold',
     },
-    inputSection: {
-        marginBottom: 20,
-    },
-    input: {
-        backgroundColor: '#fff',
-        borderRadius: 8,
-        padding: 10,
-        marginBottom: 10,
-    },
-    button: {
-        backgroundColor: '#4CAF50',
-        padding: 10,
-        borderRadius: 8,
-        paddingBottom: 10,
-    },
-    buttonText: {
-        color: '#fff',
-        textAlign: 'center',
-        fontSize: 14,
-    },
     positive: {
         color: 'green',
     },
@@ -383,10 +392,10 @@ const styles = StyleSheet.create({
     },
     sliderContactBtn: {
         backgroundColor: '#4CAF50',
-        padding: 5,
         borderRadius: 4,
+        padding: Spacing ,
         alignSelf: 'flex-start',
-        width: 80, // Small width for the contact button
+        width: 100, // Small width for the contact button
     },
     sliderContactBtnText: {
         color: '#fff',
@@ -421,7 +430,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 8,
         alignSelf: 'flex-start',
-        marginTop: 10,
+        marginTop: 0,
     },
     modalButtonText: {
         color: '#fff',
