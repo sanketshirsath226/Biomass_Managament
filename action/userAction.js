@@ -242,6 +242,38 @@ export const getAllDepots = () => async (dispatch) => {
         })
     }
 }
+
+export const getNearestDepots = (token) => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_ALL_DEPOTS_REQUEST });
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+        const { data } = await axios.get('/api/v1/depots/getNearestDepots',{ headers: {
+            'x-auth-token': token
+         }},config);
+        console.log(data)
+        dispatch({
+            type: GET_ALL_DEPOTS_SUCCESS,
+            payload: data.nearestDepots,
+        });
+
+    } catch (error) {
+        console.log(error)
+        dispatch({
+            type: GET_ALL_DEPOTS_FAIL,
+            payload: {
+                status_code : error.response.status,
+                message : error.response.data.message
+            }
+        })
+    }
+}
+
 export const getAllRefinery = () => async (dispatch) => {
     try {
 
@@ -270,6 +302,39 @@ export const getAllRefinery = () => async (dispatch) => {
         })
     }
 }
+
+export const getNearestRefinery = (token) => async (dispatch) => {
+    try {
+
+        dispatch({ type: GET_ALL_REFINERY_REQUEST });
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+        const { data } = await axios.get('/api/v1/refinery/getNearestRefinery', { headers: {
+            'x-auth-token': token
+         }},config);
+
+        console.log(data)
+        dispatch({
+            type: GET_ALL_REFINERY_SUCCESS,
+            payload: data.nearestRefinery,
+        });
+
+    } catch (error) {
+        console.log(error)
+        dispatch({
+            type: GET_ALL_REFINERY_FAIL,
+            payload: {
+                status_code : error.response.status,
+                message : error.response.data.message
+            }
+        })
+    }
+}
+
 
 export const logoutUser = () => async (dispatch) => {
     try {

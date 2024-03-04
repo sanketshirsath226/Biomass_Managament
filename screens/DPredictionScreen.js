@@ -16,8 +16,12 @@ import Spacing from "../constants/Spacing";
 import {useDispatch, useSelector} from "react-redux";
 import {predictBiomasss} from "../action/dashboardAction";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {getAllDepots, getAllRefinery, loadUser} from "../action/userAction";
-
+import {getAllDepots, getAllRefinery, getNearestRefinery, loadUser} from "../action/userAction";
+import Font from '../constants/Font';
+import Colors from '../constants/Colors';
+import FontSize from '../constants/FontSize';
+import RNPickerSelect from 'react-native-picker-select';
+import { PREDCIT_BIOMASS_RESET } from '../constants/dashboardConstants';
 const DPredictionScreen = ({navigation: { navigate } }) => {
 
     const [predictedBiomass,setPredictedBiomass] = useState("")
@@ -26,20 +30,28 @@ const DPredictionScreen = ({navigation: { navigate } }) => {
     const getToken = async () =>{
         return await AsyncStorage.getItem("token")
     }
+    const [year,setYear] = useState("")
 
     const [demand,setDemand] = useState("")
 
     const dispatch = useDispatch()
     const { token,user,isAuthenticated } = useSelector((state) => state.user);
 
-    const fetchDepots = async () =>{
-        await dispatch(getAllRefinery())
+    const fetchRefinery = async () =>{
+        await dispatch(getNearestRefinery(token))
     }
+    const predictionYear = [
+        { label: "2018", value: "2018" },
+        { label: "2019", value: "2019" },
+    ]
+
     useEffect(() => {
         if(refinery){
             console.log(refinery)
         }
-        fetchDepots()
+        if(token){
+            fetchRefinery()
+        }
     }, []);
 
     // useEffect(() => {
@@ -63,7 +75,9 @@ const DPredictionScreen = ({navigation: { navigate } }) => {
 
     const fetchPredictionBiomass = async  () =>{
         console.log(user)
-        await dispatch(predictBiomasss(token,'2018',user.location.longitude,user.location.latitude))
+        if(year != ""){
+            await dispatch(predictBiomasss(token,year,user.location.longitude,user.location.latitude))
+        }
     }
     useEffect(() => {
         console.log(biomassPrediction.predictionValues)
@@ -117,19 +131,50 @@ const DPredictionScreen = ({navigation: { navigate } }) => {
 
             {/* Interactive Prediction Card */}
             <View style={styles.predictionCard}>
-                <Text style={styles.heading}>Prediction for November 2024</Text>
+                <Text style={styles.heading}>{(!predictedBiomass)? "Prediction for which year" : "Prediction for "+ year  }</Text>
+                {!predictedBiomass?
+                <>
+                 <View style={[
+                                {
+                                fontFamily: Font["poppins-regular"],
+                                fontSize: FontSize.small,
+                                padding: Spacing * 2,
+                                backgroundColor: Colors.lightPrimary,
+                                borderRadius: Spacing,
+                                marginVertical: Spacing,
+                                }
+                            ]}>
+                    <RNPickerSelect
+                        onValueChange={(value) => setYear(value)}
+                        useNativeAndroidPickerStyle={false}
+                        placeholder={{ label: "Select a Year", value: null }}
+                        items={predictionYear}
+                        />
+                       
+                    </View>
+                 <TouchableOpacity style={styles.sliderContactBtn} onPress={fetchPredictionBiomass}>
+                            <Text style={styles.sliderContactBtnText}>Prediction</Text>
+                        </TouchableOpacity>
+                </>
+               :<> 
                 <View style={styles.cardContent}>
                     <Text style={styles.icon}>📊</Text>
-                    {(predictedBiomass)?
                     <View style={styles.predictionInfo}>
                         <Text><Text style={styles.bold}>Biomass Predicted:</Text> {predictedBiomass} kg</Text>
                         <Text><Text style={styles.bold}>Profit:</Text> <Text style={styles.positive}>$3,456</Text></Text>
                     </View>
-                    : <TouchableOpacity style={styles.sliderContactBtn} onPress={fetchPredictionBiomass}>
-                            <Text style={styles.sliderContactBtnText}>Prediction</Text>
-                        </TouchableOpacity>}
                 </View>
-                <Text style={styles.infoBtn} onPress={openModal}>Info</Text>
+                <TouchableOpacity  onPress={()=>{
+                     dispatch({
+                        type: PREDCIT_BIOMASS_RESET,
+                        payload: {
+                        }
+                    });
+                }}><Text  style={styles.infoBtn}>
+                Clear
+                </Text></TouchableOpacity>
+                </>}
+               
             </View>
 
             <View style={styles.predictionCard}>

@@ -17,6 +17,7 @@ import AppTextInput from "../components/AppTextInput";
 import {useDispatch, useSelector} from "react-redux";
 import {clearErrors, loadUser, loginUser, registerUser, updateProfile} from "../action/userAction";
 import {UPDATE_PROFILE_RESET} from "../constants/userConstants";
+import RNPickerSelect from 'react-native-picker-select';
 
 const SetUpScreen = ({ navigation: { navigate } }) => {
 
@@ -31,6 +32,11 @@ const SetUpScreen = ({ navigation: { navigate } }) => {
     const [role,setRole]  =useState("harvester");
     const [location, setLocation] = useState("24.58758,71.88882");
 
+    const roles = [
+        { label: "Harvester", value: "harvester" },
+        { label: "Depot", value: "depot" },
+        { label: "Refinery", value: "refinery" }
+       ];
 
     useEffect(() => {
         if(!user || !isAuthenticated){
@@ -121,9 +127,26 @@ const SetUpScreen = ({ navigation: { navigate } }) => {
                     <AppTextInput name="name" placeholder="Full Name" value={name}  onChangeText = {(text) =>{
                         setName(text)
                     }} />
-                    <AppTextInput name="role" placeholder="Role" value={role}  onChangeText = {(text) =>{
-                        setRole(text)
-                    }} />
+                    
+                    <View style={[
+                                {
+                                fontFamily: Font["poppins-regular"],
+                                fontSize: FontSize.small,
+                                padding: Spacing * 2,
+                                backgroundColor: Colors.lightPrimary,
+                                borderRadius: Spacing,
+                                marginVertical: Spacing,
+                                }
+                            ]}>
+                    <RNPickerSelect
+                        onValueChange={(value) => setRole(value)}
+                        useNativeAndroidPickerStyle={false}
+                        placeholder={{ label: "Select a role", value: null }}
+                        items={roles}
+                        />
+                    </View>
+                    
+
                     <AppTextInput name={"location"} placeholder="Location (Longtitude , Latitiude)" value={location}  onChangeText = {(text) =>{
                         setLocation(text)
                     }} />

@@ -5,7 +5,7 @@ import {
     USER_DETAILS_RESET,
     USER_DETAILS_SUCCESS
 } from "../constants/userConstants";
-import {PREDICT_BIOMASS_FAIL, PREDICT_BIOMASS_REQUEST, PREDICT_BIOMASS_SUCCESS} from "../constants/dashboardConstants";
+import {PREDCIT_BIOMASS_RESET, PREDICT_BIOMASS_FAIL, PREDICT_BIOMASS_REQUEST, PREDICT_BIOMASS_SUCCESS} from "../constants/dashboardConstants";
 
 export const HarvestorDashboardReducer = (state = { biomassPrediction: {},error:{} }, { type, payload }) => {
     switch (type) {
@@ -25,7 +25,7 @@ export const HarvestorDashboardReducer = (state = { biomassPrediction: {},error:
                 loading: false,
                 error: payload,
             };
-        case USER_DETAILS_RESET:
+        case PREDCIT_BIOMASS_RESET:
             return {
                 ...state,
                 biomassPrediction: {},

@@ -56,10 +56,11 @@ export default function     Navigation() {
             name : "Profile",
             navigate : "Profile"
         },
+        // {
+        //     name : "History",
+        //     navigate : "History"
+        // },
         {
-            name : "History",
-            navigate : "History"
-        },{
             name : "Logout",
             navigate: "Logout"
         }
@@ -81,10 +82,10 @@ export default function     Navigation() {
             name : "Profile",
             navigate : "Profile"
         },
-        {
-            name : "History",
-            navigate : "History"
-        },
+        // {
+        //     name : "History",
+        //     navigate : "History"
+        // },
         {
             name : "Logout",
             navigate: "Logout"
@@ -107,10 +108,10 @@ export default function     Navigation() {
             name : "Profile",
             navigate : "Profile"
         },
-        {
-            name : "History",
-            navigate : "History"
-        },
+        // {
+        //     name : "History",
+        //     navigate : "History"
+        // },
         {
             name : "Logout",
             navigate: "Logout"
